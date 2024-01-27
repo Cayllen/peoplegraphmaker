@@ -211,18 +211,18 @@
 	<meta name="keywords" content="" />
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://xxx.xxx" />
+	<meta property="og:url" content="https://peoplegraphmaker.com" />
 
-	<meta property="og:image" content="https://xxx.xxx/preview.png" />
+	<meta property="og:image" content="https://peoplegraphmaker.com/preview.png" />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="600" />
 
-	<meta name="msapplication-TileImage" content="https://xxx.xxx/preview.png" />
+	<meta name="msapplication-TileImage" content="https://peoplegraphmaker.com/preview.png" />
 
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta property="twitter:url" content="https://xxx.xxx" />
-	<meta property="twitter:domain" content="xxx.xxx" />
+	<meta property="twitter:url" content="https://peoplegraphmaker.com" />
+	<meta property="twitter:domain" content="peoplegraphmaker.com" />
 
-	<meta name="twitter:image" content="https://xxx.xxx/preview.png" />
+	<meta name="twitter:image" content="https://peoplegraphmaker.com/preview.png" />
 </svelte:head>
