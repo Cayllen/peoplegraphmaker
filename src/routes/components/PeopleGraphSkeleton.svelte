@@ -10,7 +10,18 @@
 	import { draw } from 'svelte/transition';
 	import ColorPicker from '$cmp/ColorPicker.svelte';
 	import Slider from '$lib/components/ui/slider/slider.svelte';
-	import { Canvas, StaticCanvas, Rect, Color, Path, Group, util, Gradient } from 'fabric'; // browser
+	import {
+		Canvas,
+		StaticCanvas,
+		Rect,
+		Color,
+		Path,
+		Group,
+		util,
+		Gradient,
+		loadSVGFromString,
+		loadSVGFromURL
+	} from 'fabric'; // browser
 
 	export let type = 'People Graph';
 	let appName = type;
@@ -24,24 +35,29 @@
 	let zoom = 1;
 	let mounted = false;
 	let ctx;
-	const defaultValues = {
-		rows: 10,
-		columns: 10,
-		xGap: 21,
-		yGap: 25,
-		zoom: 1,
-		colorInputs: [
-			{ id: 'head', label: 'Head', value: '#e66465', colorUntil: 1 }
-			// Add more color inputs as needed
-		]
-	};
+	let ownSVG = '';
+
 	function reset() {
+		const defaultValues = {
+			rows: 10,
+			columns: 10,
+			xGap: 21,
+			yGap: 25,
+			zoom: 1,
+			colorInputs: [
+				{ id: 'head', label: 'Head', value: '#e66465', colorUntil: 1 }
+				// Add more color inputs as needed
+			]
+		};
+
 		rows = defaultValues.rows;
 		columns = defaultValues.columns;
 		xGap = defaultValues.xGap;
 		yGap = defaultValues.yGap;
 		zoom = defaultValues.zoom;
 		colorInputs = defaultValues.colorInputs;
+		columnsLabel = columns;
+		rowsLabel = rows;
 	}
 
 	// look into https://jsfiddle.net/Maxyz/7mjnvh8u/24/ canvag for bringing in other svgs than just my own
@@ -173,46 +189,72 @@
 		}
 		canv2.renderAll();
 	}
-	function redraw() {
+	async function redraw() {
 		// colorInputs[colorInputs.length - 1].colorUntil = rows * columns;
 
 		console.log('redraw');
 		canv2.clear();
+		let loadedSVG;
+		// https://jsfiddle.net/Maxyz/5hrwt9ka/9/
+		if (ownSVG.length) {
+			loadedSVG = await loadSVGFromString(ownSVG);
 
-		var path = () =>
-			new Path(
-				'M12 1C8.96243 1 6.5 3.46243 6.5 6.5C6.5 9.53757 8.96243 12 12 12C15.0376 12 17.5 9.53757 17.5 6.5C17.5 3.46243 15.0376 1 12 1Z'
-			);
-		var path2 = () =>
-			new Path(
-				'M7 14C4.23858 14 2 16.2386 2 19V22C2 22.5523 2.44772 23 3 23H21C21.5523 23 22 22.5523 22 22V19C22 16.2386 19.7614 14 17 14H7Z'
-			);
-		let currentID = 0;
+			var svgData = util.groupSVGElements(loadedSVG.objects);
+			svgData.scaleToWidth(20);
+			svgData.scaleToHeight(20);
+		} else {
+			var path = () =>
+				new Path(
+					'M12 1C8.96243 1 6.5 3.46243 6.5 6.5C6.5 9.53757 8.96243 12 12 12C15.0376 12 17.5 9.53757 17.5 6.5C17.5 3.46243 15.0376 1 12 1Z'
+				);
+			var path2 = () =>
+				new Path(
+					'M7 14C4.23858 14 2 16.2386 2 19V22C2 22.5523 2.44772 23 3 23H21C21.5523 23 22 22.5523 22 22V19C22 16.2386 19.7614 14 17 14H7Z'
+				);
+		}
 
 		const fullGroup = new Group([], { objectCaching: false, noScaleCache: true });
 		for (let j = 0; j < rows; j++) {
 			for (let i = 0; i < columns; i++) {
-				const id = currentID++;
-
-				const group = new Group(
-					[
-						path().set({
+				let group;
+				if (ownSVG.length) {
+					group = await svgData.clone().then((gg) =>
+						gg.set({
 							objectCaching: false,
 							statefullCache: false,
-							noScaleCache: true
-						}),
-						path2().set({
-							objectCaching: false,
-							statefullCache: false,
-							noScaleCache: true
+							noScaleCache: true,
+							left: i * xGap,
+							top: j * yGap
 						})
-					],
-					{
-						left: i * xGap,
-						top: j * yGap,
-						objectCaching: false
-					}
-				);
+					);
+
+					// {
+					// 	left: i * xGap,
+					// 	top: j * yGap,
+					// 	objectCaching: false
+					// }
+					// );
+				} else {
+					group = new Group(
+						[
+							path().set({
+								objectCaching: false,
+								statefullCache: false,
+								noScaleCache: true
+							}),
+							path2().set({
+								objectCaching: false,
+								statefullCache: false,
+								noScaleCache: true
+							})
+						],
+						{
+							left: i * xGap,
+							top: j * yGap
+							// objectCaching: false
+						}
+					);
+				}
 
 				fullGroup.add(group);
 			}
@@ -228,8 +270,8 @@
 
 		let ratio = zoom * 1.5;
 
-		canvasWidth = columns * xGap;
-		canvasHeight = rows * yGap;
+		canvasWidth = columns * xGap + 5;
+		canvasHeight = rows * yGap + 5;
 
 		canv2.setDimensions(
 			{ width: canvasWidth * ratio, height: canvasHeight * ratio },
@@ -294,11 +336,34 @@
 							{ offset: 1 - afterComma, color: nextColor.value }
 						]
 					});
-					ff.item(0).set({ fill: gradient });
-					ff.item(1).set({ fill: gradient2 });
+					// TODO: add option to set color of either fill or stroke or both
+					// NOTE: SUPER UGLY METHOD to color stuff because apparently one has to color every single path
+					// ff.item(0).set({ fill: gradient });
+					// ff.item(1)?.set({ fill: gradient2 });
+
+					!!ff._objects
+						? ff._objects.forEach((num, idx, arr) => {
+								if (idx < ff._objects.length / 2) {
+									num.set({ fill: gradient });
+								} else {
+									num.set({ fill: gradient2 });
+								}
+							})
+						: ff.group._objects.forEach((num, idx, arr) => {
+								if (idx < ff.group._objects.length / 2) {
+									num.set({ fill: gradient });
+								} else {
+									num.set({ fill: gradient2 });
+								}
+							});
 				} else {
-					ff.item(0).set({ fill: colorInput.value });
-					ff.item(1).set({ fill: colorInput.value });
+					!!ff._objects
+						? ff._objects.forEach((num, idx, arr) => {
+								num.set({ fill: colorInput.value });
+							})
+						: ff.group._objects.forEach((num, idx, arr) => {
+								num.set({ fill: colorInput.value });
+							});
 				}
 
 				id++;
@@ -308,7 +373,7 @@
 	}
 	// $: mounted && console.log(mounted, rows, columns, xGap, yGap, zoom, colorInputs);
 	// $: changed = mounted && (rows, columns) ? true : false;
-	$: mounted && (rows, columns, redraw());
+	$: mounted && (rows, columns, ownSVG, redraw());
 	$: mounted && (zoom, xGap, yGap, rows, columns, zoomCanvas());
 	$: mounted && (xGap, yGap, changeCanvasGap());
 	$: mounted && (colorInputs, changeCanvasColor());
@@ -363,9 +428,12 @@
 	<div class="flex shrink-0 flex-col gap-5">
 		<div class="">
 			<h1 class="mb-5 text-center text-2xl font-light">Create your {typeF()} in Seconds</h1>
-			<h2 class="font-semibold">Settings</h2>
+			<div class="inline">
+				<h2 class="inline font-semibold">Settings</h2>
+				<Button variant="secondary" on:click={() => reset()} class=" h-6 px-2">Reset</Button>
+			</div>
 
-			<div>
+			<div class="mt-2">
 				<input
 					type="range"
 					id="rows"
@@ -420,7 +488,11 @@
 			</label>
 		</div>
 		<ColorPicker bind:colorInputs maxPpl={rows * columns} />
-
+		<input
+			bind:value={ownSVG}
+			placeholder="Paste own SVG code to replace icon"
+			class="w-full rounded-lg px-2"
+		/>
 		<div class="mt-5">
 			<h3 class="font-semibold">Download</h3>
 
