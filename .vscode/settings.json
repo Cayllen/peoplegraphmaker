@@ -1,0 +1,8 @@
+{
+	"svg.preview.background": "transparent",
+	"i18n-ally.localesPaths": ["src/localizations", "src/lib/localizations"],
+	"i18n-ally.keystyle": "nested",
+	"i18n-ally.extract.autoDetect": true,
+	"spellright.language": ["en", "de"],
+	"i18n-ally.sourceLanguage": "de"
+}

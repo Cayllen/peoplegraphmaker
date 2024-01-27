@@ -1,0 +1,152 @@
+<script lang="ts">
+	import SvelteMarkdown from 'svelte-markdown';
+	import { onMount, afterUpdate, onDestroy } from 'svelte';
+
+	const markdown = `
+# Privacy Policy peoplegraphmaker.com
+peoplegraphmaker.com is a privacy-by-design web app developed in Germany. As your service provider, we constantly work hard to protect your information: We are financially independent with source of revenue from our subscribers – we do not sell, rent, loan or lease ANY of your personal information. This Privacy Policy helps you understand what information we collect, why we use it and how you can manage and delete your information.
+
+This Privacy Policy is effective as of the date last modified, as listed at the bottom of the privacy policy.
+
+## 1. Responsible Contact
+The responsible contact according to the Federal Data Protection Act is Max Burkhardt n.e.V. Trash Bin Kollektiv. If you have any questions concerning privacy policy matters, please contact: privacy@peoplegraphmaker.com. By contacting this email address, you can inquire into privacy issues and review, change, or delete your personal information stored by us.
+
+## 2. Reasons for collection of information
+We may use the information we collect from peoplegraphmaker.com and our website to provide, maintain, protect and improve peoplegraphmaker.com and to communicate with you about your use of the Application.
+
+## 3. Personal data
+Personal data is any individual information about the personal or material circumstances of a specified or identifiable natural person. Personal data primarily includes details such as a person’s name, postal address or e-mail address.
+
+## 4. Processing and use of personal data
+### 4.1 Registration information
+In order to register a peoplegraphmaker.com account we require and store your email address and password.
+
+### 4.2 Order and payment information
+In order to process orders we require all relevant personal information, such as your name, address, email address, company name, VAT ID and information concerning the payment method you have chosen. Payments are handled securely by our payment providers Paypal and Stripe. These partner companies have their own data protection policies. We encourage you to read these policies thoroughly before using the Service, and check that you agree with them. To enable payments to be processed and invoiced, the partner company stores references to payment details. The actual payment details (including credit card and bank details) do not pass through peoplegraphmaker.com servers and systems.
+
+### 4.3 peoplegraphmaker.com information
+In order to guarantee full functionality of all peoplegraphmaker.com features and to deliver high level of customer service for you we may collect and store information about your use of the Service, such as your IP address, browser type, the web page you were visiting before you came to our website, pages of our website that you visit, the time spent on those pages, information you search for on our website, access times and dates, and other statistics. We use this information to monitor and analyze use of the Service and for the Service’s technical administration, to increase our Service’s functionality and user-friendliness, and to better tailor it to our visitors’ needs. We also use this information to verify that visitors to the Service meet the criteria required to process their requests. We do not treat this information as personal information (except to the extent required by local law), although if we combine it with the personal information you provide, we will treat the combined information as personal information.
+
+## 8. Cookies
+We use cookies on our website. These are small text files stored on your computer. We use both permanent cookies and session cookies so that we can offer you the best service possible. The data saved in the cookies make the use of our services as comfortable as possible for you, not only for your current use of the respective service but also beyond it. If you don’t want to allow permanent cookies, you can select the option to deactivate permanent cookies in your browser. The data stored in session cookies are only valid for the current visit to our online offers and serve to provide you with an unrestricted use of our services and to make the use of our offers and services as comfortable as possible for your current visit. If you deactivate session cookies, we cannot guarantee that you will be able to use all of our services without limitations.
+
+## 9. Cookies of third party providers and tracking
+We use the services of other companies to optimize our websites and our services. You will receive an overview of the services we use in the following section.
+
+### 9.1 Google Analytics
+This website uses Google Analytics, a web analytics service provided by Google, Inc (''Google''). Google Analytics uses ''cookies'', which are text files placed on your computer, to help the website analyze how users use the site. The information generated by the cookie about your use of the website (including your IP address) will be transmitted to and stored by Google on servers in the United States. Google will use this information for the purpose of evaluating your use of the website, compiling reports on website activity for website operators and providing other services relating to website activity and internet usage. Google may also transfer this information to third parties where required to do so by law, or where such third parties process the information on Google's behalf. Google will not associate your IP address with any other data held by Google. You may refuse the use of cookies by selecting the appropriate settings on your browser, however please note that if you do this you may not be able to use the full functionality of this website. By using this website, you consent to the processing of data about you by Google in the manner and for the purposes set out above.
+
+### 9.2 Google Remarketing
+Our websites use Google’s remarketing technology. This technology enables users who have already visited our online services and shown interest in our services to see targeted advertising on the websites of the Google partner network. Likewise users that are similar to the visitors of our websites can be addressed. The advertising will be displayed using cookies. These are small text files saved on the user’s computer. The information generated by the cookie about the website use will be transmitted to and stored on servers in the United States by Google. In the event that the IP address is transferred, it will be reduced by the last 3 digits. Using cookies, the user behavior on a website can be analyzed and subsequently utilized to provide targeted product recommendations and advertising based on the user’s interests.
+
+If you would prefer to not receive any targeted advertising, you can deactivate the use of cookies for these purposes through Google by visiting the website: https://www.google.com/settings/ads/. Alternatively, users can deactivate the use of cookies by third party providers by visiting the Network Advertising Initiative’s deactivation website (http://www.networkadvertising.org/choices/). Please note that Google has its own data protection policy which is independent of our own. We assume no responsibility or liability for their policies and procedures. Please read Google’s privacy policy before using our websites (https://www.google.com/intl/en/policies/privacy/).
+
+### 9.3 Facebook Tracking Pixel
+With your permission, our website utilizes the Tracking Pixel service of Facebook Inc., 1601 S. California Ave., Palo Alto, CA 94304, USA (“Facebook”). This tool allows us to follow the actions of users after they are redirected to a provider’s website by clicking on a Facebook advertisement. We are thus able to record the efficacy of Facebook advertisements for statistical and market research purposes. The collected data remain anonymous. This means that we cannot see the personal data of any individual user. However, the collected data are saved and processed by Facebook. We are informing you on this matter according to our information at this time. Facebook is able to connect the data with your Facebook account and use the data for their own advertising purposes, in accordance with Facebook’s Data Use Policy found under: https://www.facebook.com/about/privacy/. Facebook Tracking also allows Facebook and its partners to show you advertisements on and outside Facebook. In addition, a cookie will be saved onto your computer for these purposes.
+
+Only users over 13 years of age may give their permission. If you are younger than this age, please consult your legal guardians. Please click here if you would like to revoke your permission:https://www.facebook.com/ads/website_custom_audiences/.
+
+### 9.4 TikTok Tracking Pixel
+We use the TikTok Pixel on our website. The TikTok Pixel is a TikTok advertiser tool from the two providers:
+TikTok Technology Limited, 10 Earlsfort Terrace, Dublin, D02 T380, Ireland, and TikTok Information Technologies UK Limited, WeWork, 125 Kingsway, London, WC2B 6NH, United Kingdom (both hereinafter collectively referred to as “TikTok”). The TikTok Pixel is a snippet of JavaScript code that allows us to understand and track visitor activity on our website. The TikTok Pixel collects and processes information about the creators of our website or the devices they use (so-called event data). The event data collected via the TikTok Pixel is used to target our ads and to improve ad delivery and personalized advertising. For this purpose, the event data collected on our website using the TikTok pixel is transmitted to Facebook TikTok. Some of this event data is information that is stored in the device you are using. In addition, cookies are also used via the TikTok Pixel, via which information is stored on the device you are using. Such storage of information by the TikTok pixel or access to information that is already stored in your end device only takes place with your consent. The legal basis for the collection and transmission of personal data by us to TikTok is therefore Article 6 (1) (a) GDPR. You can revoke your consent at any time via our consent management tool. This collection and transmission of the event data is carried out by us and TikTok as joint controllers. We have entered into a processing agreement with TikTok as joint controllers, which sets out the distribution of data protection obligations between us and TikTok. In this Agreement, we and TikTok have agreed, among other things, that we are responsible for providing you with all information pursuant to Art. 13, 14 GDPR on the joint processing of personal data; that TikTok is responsible for enabling the rights of data subjects in accordance with Art. 15 to 20 GDPR with regard to the personal data stored by Facebook Ireland after joint processing. You can read the agreement between us and TikTok: https://ads.tiktok.com/i18n/official/article?aid=10004832.
+
+TikTok is solely responsible for the processing of the transmitted event data that follows the transmission. For more information on how TikTok processes personal data, including the legal basis on which TikTok relies and how you can exercise your rights against TikTok, see TikTok’s data policy.
+
+### 9.5 Content Delivery Network (CDN)
+We use a Content Delivery Network service on our pages from Cloudflare, Inc. (referred to as the "CDN"):
+
+Cloudflare, Inc., 405 Comal St., Austin, TX 78702, USA, ("Cloudflare")
+
+For the purpose of a shorter loading time of our online presence, we use a so-called Content Delivery Network ("CDN"), in which the website is delivered via web servers from the CDN as a service provider based on a data processing agreement. With the CDN, content from our website such as images, fonts, stylesheets and scripts are delivered to you faster via a network of servers. For this purpose, the browser you are using must connect to the CDN's servers. This way the CDN becomes aware that your IP address, along with any other information that your browser may reveal, has been used to access our website.
+
+The data collected will only be used for the aforementioned purpose and to maintain the functionality and security of the CDN.
+
+Further information can be found:
+
+In Cloudflare's privacy policy: https://www.cloudflare.com/privacypolicy/
+
+The use of the CDN serves to protect our predominantly legitimate interests within the scope of a weighing of interests according to Art. 6 Para. 1 S. 1 lit. f) GDPR in a secure provision and optimization of the online offer.
+
+
+### 9.7 Microsoft Clarity
+
+This website uses Microsoft Clarity, an analytics tool from Microsoft Corporation (One Microsoft Way, Redmond, WA 98052-6399, USA; “Microsoft”). For this purpose, Microsoft Clarity uses cookies enabling an analysis of your use of our website (e.g. entry to the page, navigation, scrolling and clicking behavior). Pursuant to § 25 para. 1 TTDPA, these are only set after their express consent. The information generated by the cookies will be transmitted to a Microsoft Clarity server (possibly in the USA) and stored in order to enable session recording and to generate so-called heat maps. We use Microsoft Clarity in the default settings, so that the data transmitted to Microsoft does not contain any sensitive input data such as names or addresses, to rule out any direct personal reference. Microsoft will use this information to evaluate your use of the website, to compile reports on website activities, and provide the website’s operator with further services related to website and Internet usage, including profiling for advertising purposes. Microsoft may also transfer this information to third parties where required to do so by law, or where such third parties process the information on Microsoft’s behalf. You may refuse the use of cookies by selecting the appropriate settings on your browser, however please note that if you do this you may not be able to use the full functionality of this website.
+
+You can find further information about Microsoft Clarity here: https://clarity.microsoft.com/
+
+The legal basis for the processing of your personal data is Art. 6 para. 1 lit. a GDPR.
+
+## 10. Third party websites and services
+Our website and service provides links to other websites and services, we do not review these sites and services, and therefore this Privacy Policy does not apply to third party websites and services. Please read their Privacy Policy before submitting any private information.
+
+## 11. Data Processing (GDPR / DSGVO)
+For European individuals, GDPR expands their data privacy rights and gives them more power to control their data. GDPR also requires compliance from companies that process the personal data of these European individuals. Ensuring our users’ data privacy and security has always been top priority to peoplegraphmaker.com’s product development and business. As your service provider to enhance your email experience, we make sure to evaluate all our practices to safeguard your information as effectively as possible. As a German company, peoplegraphmaker.com will be fully GDPR compliant. If you have any questions about GDPR or our data practices generally, please contact our data protection officer Tobias Knobl (privacy@peoplegraphmaker.com).
+
+### 11.1 Authorized employees
+We ensure that all authorized employees who can access personal data are made aware of the confidential nature of personal data and have executed confidentiality agreements that prevent them from disclosing or otherwise processing, both during and after their engagement with peoplegraphmaker.com, any personal data except in accordance with their obligations in connection with the Services. We don’t allow humans to read message, voice, contact and non-public account data and any other user data created in peoplegraphmaker.com unless doing so is necessary for security purposes such as investigating abuse or to comply with applicable law.
+
+### 11.2 Authorized subcontractors
+peoplegraphmaker.com may engage authorized Subcontractors to access and process personal data in connection with the Services and from time to time engage additional third parties for the purpose of providing the Services, including without limitation the processing of personal data. At least ten (10) days before enabling any third party other than authorized subcontractors to access or participate in the processing of personal data, peoplegraphmaker.com will add such third party to the List.
+- Supabase
+- AWS Webservices
+
+### 11.3 Duration of Processing
+We retain personal data about you for as long as you have an open account with us. In some cases we retain personal data for longer, if doing so is necessary to comply with our legal obligations, resolve disputes or collect fees owed, or is otherwise permitted or required by applicable law, rule or regulation.
+
+### 11.4 Security of personal data
+Taking into account the state of the art, the costs of implementation and the nature, scope, context and purposes of processing as well as the risk of varying likelihood and severity for the rights and freedoms of natural persons, we maintain appropriate technical and organizational measures to ensure a level of security appropriate to the risk of Processing Personal Data.
+
+### 11.5 Access personal data
+You can request more information about the personal data we hold about you and request a copy of such personal data by contacting us via email info@peoplegraphmaker.com
+
+### 11.6 Erase personal data
+You can request that we erase some or all of your personal data from our systems.
+
+### 11.7 Portability of personal data
+You can ask for a copy of your personal data in a machine-readable format. You can also request that we transmit the data to another service.
+
+### 11.8 Data processing agreement
+If you are using peoplegraphmaker.com as a customer and have agreed to our terms of service, you do not need to sign an additional Data Protection Agreement. If you are a partner or a customer who needs further documentation of compliance with peoplegraphmaker.com acting as a Processor, peoplegraphmaker.com offers Data Processing Agreements (DPAs) to users upon request. Please email us for more information info@peoplegraphmaker.com
+
+Please note that our DPA has been tailored to the way peoplegraphmaker.com provides its service.
+
+## 12. Protecting your information
+We take the security of your personal information very seriously and have implemented policies and procedures, including technical measures, that are designed to help safeguard it. While we strive to use best practices to protect your personal information, the Internet and computer technology are not 100% secure and we cannot absolutely ensure the security of any personal information that you provide to us. In line with this philosophy, we try to get as little information from you as possible.
+
+## 13. Reasons for information disclosure
+We do not sell, rent, loan, or lease your contact information to others, unless we have your specific permission to do so or we are required by law or litigation to disclose your personal information. We may also find it necessary to disclose information about you if we determine that it is an issue concerning national security, law enforcement, or other issues of public importance.
+
+## 14. Vulnerability Disclosure
+If you have discovered an issue which you believe is an in-scope security vulnerability, please email privacy@peoplegraphmaker.com including:
+
+The website or service in which the vulnerability exists.
+A brief description of the class (e.g. “XSS vulnerability”) of the vulnerability. Please avoid including any details which would allow reproduction of the issue at this stage. In accordance with industry convention, we ask that reporters provide a benign (i.e. non-destructive) proof of exploitation wherever possible. This helps to ensure that the report can be triaged quickly and accurately whilst also reducing the likelihood of duplicate reports and/or malicious exploitation for some vulnerability classes (e.g. sub-domain takeovers). Please ensure that you do not send your proof of exploit in the initial, plaintext email if the vulnerability is still exploitable. If you are in any doubt or have any question, please email privacy@peoplegraphmaker.com for advice. In response to your initial email to privacy@peoplegraphmaker.com you will receive an acknowledgement reply email from the peoplegraphmaker.com Security Team, this is usually within 24 hours of your report being received. The acknowledgment email will include a ticket reference number which you can quote in any further communications with our Security Team. Following the initial contact, our Security Team will work to triage the reported vulnerability and will respond to you as soon as possible to confirm if further information is required. From this point, necessary remediation work will be assigned to the appropriate peoplegraphmaker.com teams and/or supplier(s). Priority for bug fixes and/or mitigations will be assigned based on the severity of impact and complexity of exploitation. Vulnerability reports may take some time to triage and/or remediate. Our Security Team will notify you when the reported vulnerability is resolved and will ask you to confirm that the solution covers the vulnerability adequately.
+
+## 15. Changes to this data protection policy
+peoplegraphmaker.com reserves the right to adapt its security and data protection measures, provided this is necessary as a result of technical or legal developments. In these cases, we will also update our data protection information accordingly. Please make sure, therefore, that you always use the latest version of our data protection declaration.
+
+## 16. Privacy questions and contact
+If you do not want us to keep you up to date with our news, you are free to contact us at any time and have your e-mail address removed from our mailing list. We do not target any information towards children. If you have any comments or concerns about our Privacy Policy, please contact us (info@peoplegraphmaker.com).
+
+We reserve the right to change this policy, which we’ll do through online posting.
+
+Last updated: 26th May, 2023`;
+</script>
+
+<svelte:head>
+	<title>Privacy Policy</title>
+	<meta name="description" content="This is the privacy policy page." />
+</svelte:head>
+<section>
+	<div id="home" class="relative overflow-hidden bg-primary pt-[120px] md:pt-[130px] lg:pt-[160px]">
+		<div class="container">
+			<div class="-mx-4 flex flex-wrap items-center">
+				<div class="w-full px-5 py-10 lg:px-28">
+					<article class="prose prose-invert max-w-fit lg:prose-xl">
+						<SvelteMarkdown source={markdown} options={{ mangle: false }} />
+					</article>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
