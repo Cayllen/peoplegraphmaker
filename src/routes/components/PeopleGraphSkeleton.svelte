@@ -359,7 +359,7 @@
 	pageDescription="Create your own {typeF()} in seconds. Just set the settings and download your Person Graph as PNG or SVG. No registration needed. For free."
 ></SubPageMetaTags>
 
-<section class="z-10 mx-5 flex flex-col gap-5 pt-20 lg:mx-52 lg:flex-row">
+<section class="z-10 mx-5 flex flex-col gap-5 pt-20 lg:mx-52 lg:flex-row lg:gap-20">
 	<div class="flex shrink-0 flex-col gap-5">
 		<div class="">
 			<h1 class="mb-5 text-center text-2xl font-light">Create your {typeF()} in Seconds</h1>
@@ -428,11 +428,26 @@
 				download="Canvas.png"
 				href={'#'}
 				class="w-32"
-				on:click={(e) => downloadCanvasAsPNG(e.target)}
+				on:click={(e) => {
+					downloadCanvasAsPNG(e.target);
+					gtag('event', 'Download PNG', {
+						page_location: window.location.href
+					});
+				}}
 			>
 				Download PNG
 			</Button>
-			<Button download="Canvas.svg" href={'#'} class="w-32" on:click={(e) => canvasToSVG(e.target)}>
+			<Button
+				download="Canvas.svg"
+				href={'#'}
+				class="w-32"
+				on:click={(e) => {
+					canvasToSVG(e.target);
+					gtag('event', 'Download SVG', {
+						page_location: window.location.href
+					});
+				}}
+			>
 				Download SVG
 			</Button>
 		</div>
