@@ -2,7 +2,7 @@
 	export let navigationMenu;
 </script>
 
-<div class="ud-header absolute left-0 top-0 z-40 flex w-full items-center bg-gray-950/70">
+<div class="ud-header absolute left-0 top-0 z-40 flex w-full items-center bg-gray-900">
 	<div class="container">
 		<div class="relative -mx-4 flex items-center justify-between">
 			<div class="w-96 max-w-full px-4">
@@ -12,7 +12,7 @@
                         src="/images/logo/PersonGraphMaker_Logo_horiz_wht.svg"
                         alt="PersonGraphMaker.com" -->
 					<p
-						class="header-logo bg-gradient-to-r from-sky-300 to-yellow-600 bg-clip-text text-xl font-extrabold tracking-wide text-transparent"
+						class="header-logo bg-gradient-to-r from-sky-200 to-yellow-600 bg-clip-text text-xl font-extrabold tracking-wide text-transparent"
 					>
 						PeopleGraphMaker.com
 					</p>
