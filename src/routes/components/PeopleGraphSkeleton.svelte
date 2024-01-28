@@ -5,7 +5,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { dev } from '$app/environment';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { ListFilter, Send } from 'lucide-svelte';
+	import { ListFilter, LogIn, Send } from 'lucide-svelte';
 	import SubPageMetaTags from '$cmp/SubPageMetaTags.svelte';
 	import { draw } from 'svelte/transition';
 	import ColorPicker from '$cmp/ColorPicker.svelte';
@@ -36,7 +36,8 @@
 	let mounted = false;
 	let ctx;
 	let ownSVG = '';
-
+	let rtl = false; // TODO add as option
+	let downToUp = false; // TODO add as option
 	function reset() {
 		const defaultValues = {
 			rows: 10,
@@ -47,7 +48,9 @@
 			colorInputs: [
 				{ id: 'head', label: 'Head', value: '#e66465', colorUntil: 1 }
 				// Add more color inputs as needed
-			]
+			],
+			rtl: false,
+			downToUp: false
 		};
 
 		rows = defaultValues.rows;
@@ -58,6 +61,8 @@
 		colorInputs = defaultValues.colorInputs;
 		columnsLabel = columns;
 		rowsLabel = rows;
+		rtl = defaultValues.rtl;
+		downToUp = defaultValues.downToUp;
 	}
 
 	// look into https://jsfiddle.net/Maxyz/7mjnvh8u/24/ canvag for bringing in other svgs than just my own
@@ -268,11 +273,11 @@
 		// maxbe reduce quality a bit..
 		console.log('zoomCanvas');
 
+		// let ratio = zoom * 0.9;
 		let ratio = zoom * 1.5;
 
 		canvasWidth = columns * xGap + 5;
 		canvasHeight = rows * yGap + 5;
-
 		canv2.setDimensions(
 			{ width: canvasWidth * ratio, height: canvasHeight * ratio },
 			{ cssOnly: false }
@@ -283,6 +288,7 @@
 		);
 		canv2.setZoom(ratio);
 	}
+
 	function changeCanvasGap() {
 		if (!canv2.getObjects()[0]) return;
 		console.log('changeCanvasGap');
@@ -309,14 +315,22 @@
 		if (!canv2.getObjects()[0]) return;
 		console.log('changeCanvasColor');
 		let id = 0;
+
 		for (let j = 0; j < rows; j++) {
 			for (let i = 0; i < columns; i++) {
+				// this option reverses the id for each row
+				let dynamicID = rtl ? rows * (j + 1) - (i + 1) : id;
+				let dynamicID2 = downToUp ? rows * columns - dynamicID - 1 : dynamicID;
+
 				const ff = canv2.getObjects()[0]?.item(id);
-				const newColorID = colorInputs.findIndex((input) => input.colorUntil > id);
+				const newColorID = colorInputs.findIndex((input) => input.colorUntil > dynamicID2);
 				const colorInput = colorInputs[newColorID];
 				let nextColor = colorInputs[newColorID + 1];
 
-				if (!Number.isInteger(colorInput.colorUntil) && id === Math.floor(colorInput.colorUntil)) {
+				if (
+					!Number.isInteger(colorInput.colorUntil) &&
+					dynamicID2 === Math.floor(colorInput.colorUntil)
+				) {
 					const afterComma = Math.abs(colorInput.colorUntil) - Math.floor(colorInput.colorUntil);
 					var gradient = new Gradient({
 						type: 'linear',
@@ -336,6 +350,10 @@
 							{ offset: 1 - afterComma, color: nextColor.value }
 						]
 					});
+					if (rtl !== downToUp) {
+						gradient.colorStops.reverse();
+						gradient2.colorStops.reverse();
+					}
 					// TODO: add option to set color of either fill or stroke or both
 					// NOTE: SUPER UGLY METHOD to color stuff because apparently one has to color every single path
 					// ff.item(0).set({ fill: gradient });
@@ -376,7 +394,7 @@
 	$: mounted && (rows, columns, ownSVG, redraw());
 	$: mounted && (zoom, xGap, yGap, rows, columns, zoomCanvas());
 	$: mounted && (xGap, yGap, changeCanvasGap());
-	$: mounted && (colorInputs, changeCanvasColor());
+	$: mounted && (colorInputs, rtl, downToUp, changeCanvasColor());
 	// $: colorInputs[colorInputs.length - 1].colorUntil = rows * columns;
 	// $: mounted && (rows, columns, xGap, yGap, zoom, colorInputs, drawCanvas());
 	//
@@ -493,6 +511,12 @@
 			placeholder="Paste own SVG code to replace icon"
 			class="w-full rounded-lg px-2"
 		/>
+		<div>
+			<input type="checkbox" name="flipY" bind:checked={rtl} id="" />
+			<label for="flipY">Flip Horizontal</label>
+			<input type="checkbox" name="flipX" bind:checked={downToUp} id="" />
+			<label for="flipX">Flip Vertical</label>
+		</div>
 		<div class="mt-5">
 			<h3 class="font-semibold">Download</h3>
 
