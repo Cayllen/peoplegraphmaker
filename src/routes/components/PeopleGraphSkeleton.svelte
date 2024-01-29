@@ -145,7 +145,7 @@
 
 		canv2 = new StaticCanvas(canvas2, {
 			renderOnAddRemove: false,
-			imageSmoothingEnabled: true,
+			imageSmoothingEnabled: false,
 			enableRetinaScaling: true,
 			perfLimitSizeTotal: 225000000,
 			maxCacheSideLimit: 11000
@@ -221,7 +221,7 @@
 		}
 
 		const fullGroup = new Group([], {
-			objectCaching: false,
+			objectCaching: true,
 			noScaleCache: false
 		});
 		for (let j = 0; j < rows; j++) {
@@ -230,8 +230,8 @@
 				if (ownSVG.length) {
 					group = await svgData.clone().then((gg) =>
 						gg.set({
-							objectCaching: false,
-							statefullCache: false,
+							objectCaching: true,
+							// statefullCache: false,
 							noScaleCache: true,
 							left: i * xGap,
 							top: j * yGap
@@ -249,19 +249,19 @@
 						[
 							path().set({
 								// objectCaching: true,
-								// statefullCache: false
-								// noScaleCache: false
+								// statefullCache: true
+								// // noScaleCache: true
 							}),
 							path2().set({
 								// objectCaching: true,
-								// statefullCache: false
-								// noScaleCache: false
+								// statefullCache: true
+								// // noScaleCache: false
 							})
 						],
 						{
 							left: i * xGap,
 							top: j * yGap
-							// objectCaching: false
+							// objectCaching: true
 						}
 					);
 				}
@@ -279,6 +279,8 @@
 	$: baseRatio = 1 / (1 + Math.pow(Math.E, 0.0015 * (rows * columns - 2000)));
 	function zoomCanvas() {
 		// maxbe reduce quality a bit..
+		// if (!canv2.getObjects()[0]) return;
+
 		console.log('zoomCanvas');
 
 		// let ratio = zoom * 0.9;
@@ -289,13 +291,17 @@
 		canvasWidth = columns * xGap + 5;
 		canvasHeight = rows * yGap + 5;
 		canv2.setDimensions(
-			{ width: canvasWidth * zoomRatio + 'px', height: canvasHeight * zoomRatio + 'px' },
+			{
+				width: canvasWidth * zoomRatio + 'px',
+				height: canvasHeight * zoomRatio + 'px'
+			},
 			{ cssOnly: true, backstoreOnly: false }
 		);
 		canv2.setDimensions(
 			{ width: canvasWidth * ratio, height: canvasHeight * ratio },
 			{ cssOnly: false }
 		);
+
 		canv2.setZoom(ratio);
 	}
 
@@ -318,6 +324,7 @@
 		}
 
 		canv2.renderAll();
+		canv2.getObjects()[0].triggerLayout();
 	}
 	function changeCanvasColor() {
 		colorInputs[colorInputs.length - 1].colorUntil = rows * columns;
@@ -428,7 +435,12 @@
 		a.dispatchEvent(e);
 	}
 	function downloadCanvasAsPNG(e) {
-		let dataURL = canvas2.toDataURL('image/png');
+		// canv2.scale(30);
+
+		let dataURL = canvas2.toDataURL({
+			multiplier: 1
+		});
+
 		dataURL = dataURL.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
 
 		/* In addition to <a>'s "download" attribute, you can define HTTP-style headers */
@@ -509,9 +521,9 @@
 			<input type="range" id="zoom" bind:value={zoom} min="0.1" step="0.01" max={7 * baseRatio} />
 			<label for="zoom">
 				Size: {canvasWidth
-					? Math.floor(canvasWidth * 2 * zoom * baseRatio) +
+					? Math.floor(canvasWidth * zoom * baseRatio) +
 						'px x ' +
-						Math.floor(canvasHeight * 2 * zoom * baseRatio) +
+						Math.floor(canvasHeight * zoom * baseRatio) +
 						'px'
 					: ''}
 			</label>
