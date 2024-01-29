@@ -83,7 +83,7 @@
 			],
 			rtl: false,
 			downToUp: false,
-			selectedType: 'square',
+			selectedType: 'person',
 			ownSVG: ''
 		};
 
@@ -237,7 +237,6 @@
 		// https://jsfiddle.net/Maxyz/5hrwt9ka/9/
 		if (ownSVG.length) {
 			const loadedSVG = await loadSVGFromString(ownSVG);
-			console.log(loadedSVG);
 
 			var svgData = util.groupSVGElements(loadedSVG.objects);
 			svgData.scaleToWidth(20);
