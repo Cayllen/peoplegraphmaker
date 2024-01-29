@@ -1,15 +1,9 @@
 <script lang="ts">
 	import { onMount, afterUpdate, tick } from 'svelte';
-	import { enhance } from '$app/forms';
 	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import { dev } from '$app/environment';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { GitGraph, ListFilter, LogIn, Send } from 'lucide-svelte';
+
 	import SubPageMetaTags from '$cmp/SubPageMetaTags.svelte';
-	import { draw } from 'svelte/transition';
 	import ColorPicker from '$cmp/ColorPicker.svelte';
-	import Slider from '$lib/components/ui/slider/slider.svelte';
 	import {
 		Canvas,
 		StaticCanvas,
@@ -17,11 +11,13 @@
 		Color,
 		Path,
 		Group,
+		Circle as FabricCircle,
 		util,
 		Gradient,
 		loadSVGFromString,
 		loadSVGFromURL
 	} from 'fabric'; // browser
+	import { Circle, Square, User } from 'lucide-svelte';
 
 	export let type = 'People Graph';
 	let appName = type;
@@ -32,10 +28,47 @@
 	let zoom = 1;
 	let mounted = false;
 	let ctx;
-	let ownSVG = '';
+	let ownSVG;
 	let rtl = false; // TODO add as option
 	let downToUp = false; // TODO add as option
 	let colorInputs = [];
+	let selectedType;
+	const iconTypes = {
+		person: generatePerson(),
+		circle: generateCircle(),
+		squareRounded: generateSquareRounded(),
+		square: generateSquare()
+	};
+	function generateSquareRounded() {
+		const square = () => new Rect({ width: 16, height: 16, rx: 3, ry: 3 });
+		const objectGroup = () => [square()];
+		return objectGroup;
+	}
+	function generateSquare() {
+		const square = () => new Rect({ width: 16, height: 16 });
+		const objectGroup = () => [square()];
+		return objectGroup;
+	}
+
+	function generateCircle() {
+		const circle = () => new FabricCircle({ radius: 8 });
+		const objectGroup = () => [circle()];
+		return objectGroup;
+	}
+
+	function generatePerson() {
+		const path = () =>
+			new Path(
+				'M12 1C8.96243 1 6.5 3.46243 6.5 6.5C6.5 9.53757 8.96243 12 12 12C15.0376 12 17.5 9.53757 17.5 6.5C17.5 3.46243 15.0376 1 12 1Z'
+			);
+		const path2 = () =>
+			new Path(
+				'M7 14C4.23858 14 2 16.2386 2 19V22C2 22.5523 2.44772 23 3 23H21C21.5523 23 22 22.5523 22 22V19C22 16.2386 19.7614 14 17 14H7Z'
+			);
+		const objectGroup = () => [path(), path2()];
+
+		return objectGroup;
+	}
 	function reset() {
 		const defaultValues = {
 			rows: 10,
@@ -49,7 +82,9 @@
 				// Add more color inputs as needed
 			],
 			rtl: false,
-			downToUp: false
+			downToUp: false,
+			selectedType: 'square',
+			ownSVG: ''
 		};
 
 		rows = defaultValues.rows;
@@ -62,6 +97,8 @@
 		rowsLabel = rows;
 		rtl = defaultValues.rtl;
 		downToUp = defaultValues.downToUp;
+		selectedType = defaultValues.selectedType;
+		ownSVG = defaultValues.ownSVG;
 	}
 	reset();
 	// look into https://jsfiddle.net/Maxyz/7mjnvh8u/24/ canvag for bringing in other svgs than just my own
@@ -197,23 +234,14 @@
 
 		console.log('redraw');
 		canv2.clear();
-		let loadedSVG;
 		// https://jsfiddle.net/Maxyz/5hrwt9ka/9/
 		if (ownSVG.length) {
-			loadedSVG = await loadSVGFromString(ownSVG);
+			const loadedSVG = await loadSVGFromString(ownSVG);
+			console.log(loadedSVG);
 
 			var svgData = util.groupSVGElements(loadedSVG.objects);
 			svgData.scaleToWidth(20);
 			svgData.scaleToHeight(20);
-		} else {
-			var path = () =>
-				new Path(
-					'M12 1C8.96243 1 6.5 3.46243 6.5 6.5C6.5 9.53757 8.96243 12 12 12C15.0376 12 17.5 9.53757 17.5 6.5C17.5 3.46243 15.0376 1 12 1Z'
-				);
-			var path2 = () =>
-				new Path(
-					'M7 14C4.23858 14 2 16.2386 2 19V22C2 22.5523 2.44772 23 3 23H21C21.5523 23 22 22.5523 22 22V19C22 16.2386 19.7614 14 17 14H7Z'
-				);
 		}
 
 		const fullGroup = new Group([], {
@@ -224,42 +252,18 @@
 			for (let i = 0; i < columns; i++) {
 				let group;
 				if (ownSVG.length) {
-					group = await svgData.clone().then((gg) =>
-						gg.set({
-							objectCaching: true,
-							// statefullCache: false,
-							noScaleCache: true,
-							left: i * xGap,
-							top: j * yGap
-						})
-					);
-
-					// {
-					// 	left: i * xGap,
-					// 	top: j * yGap,
-					// 	objectCaching: false
-					// }
-					// );
-				} else {
-					group = new Group(
-						[
-							path().set({
-								// objectCaching: true,
-								// statefullCache: true
-								// // noScaleCache: true
-							}),
-							path2().set({
-								// objectCaching: true,
-								// statefullCache: true
-								// // noScaleCache: false
+					group = await svgData.clone().then(
+						(gg) =>
+							new Group([gg], {
+								left: i * xGap,
+								top: j * yGap
 							})
-						],
-						{
-							left: i * xGap,
-							top: j * yGap
-							// objectCaching: true
-						}
 					);
+				} else {
+					group = new Group(iconTypes[selectedType](), {}).set({
+						left: i * xGap,
+						top: j * yGap
+					});
 				}
 
 				fullGroup.add(group);
@@ -349,10 +353,12 @@
 					dynamicID2 === Math.floor(colorInput.colorUntil)
 				) {
 					const afterComma = Math.abs(colorInput.colorUntil) - Math.floor(colorInput.colorUntil);
+					console.log(ff);
+
 					var gradient = new Gradient({
 						type: 'linear',
 						gradientUnits: 'pixels', // or 'percentage'
-						coords: { x1: 0, y1: 0, x2: ff.item(0).width, y2: 0 },
+						coords: { x1: 0, y1: 0, x2: ff.item(0)?.width ?? ff.item(0).height, y2: 0 },
 						colorStops: [
 							{ offset: afterComma, color: colorInput.value },
 							{ offset: 1 - afterComma, color: nextColor.value }
@@ -361,7 +367,7 @@
 					var gradient2 = new Gradient({
 						type: 'linear',
 						gradientUnits: 'pixels', // or 'percentage'
-						coords: { x1: 0, y1: 0, x2: ff.item(1).width, y2: 0 },
+						coords: { x1: 0, y1: 0, x2: ff.item(1)?.width ?? ff.item(1)?.height, y2: 0 },
 						colorStops: [
 							{ offset: afterComma, color: colorInput.value },
 							{ offset: 1 - afterComma, color: nextColor.value }
@@ -408,7 +414,7 @@
 	}
 	// $: mounted && console.log(mounted, rows, columns, xGap, yGap, zoom, colorInputs);
 	// $: changed = mounted && (rows, columns) ? true : false;
-	$: mounted && (rows, columns, ownSVG, redraw());
+	$: mounted && (rows, columns, selectedType, ownSVG, redraw());
 	$: mounted && (xGap, yGap, changeCanvasGap());
 	$: mounted && (zoom, xGap, yGap, rows, columns, zoomCanvas());
 
@@ -529,16 +535,68 @@
 			</label>
 		</div>
 		<ColorPicker bind:colorInputs maxPpl={rows * columns} />
-		<input
-			bind:value={ownSVG}
-			placeholder="Paste own SVG code to replace icon"
-			class="w-full rounded-lg px-2"
-		/>
+
 		<div>
+			<h2 class="font-semibold">Orientation</h2>
+
 			<input type="checkbox" name="flipY" bind:checked={rtl} id="" />
 			<label for="flipY">Flip Horizontal</label>
 			<input type="checkbox" name="flipX" bind:checked={downToUp} id="" />
 			<label for="flipX">Flip Vertical</label>
+		</div>
+		<div>
+			<h2 class=" mb-2 font-semibold">Icon</h2>
+			<div class="flex max-w-full flex-row flex-wrap gap-3">
+				<label
+					class="rounded-xl px-2 py-1 shadow-xl shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
+				>
+					<input type="radio" value="person" bind:group={selectedType} class="appearance-none" />
+					Person
+					<User class="inline fill-black stroke-none" />
+				</label>
+				<label
+					class="rounded-xl px-2 py-1 shadow-xl shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
+				>
+					<input type="radio" value="circle" bind:group={selectedType} class="appearance-none" />
+					Circle
+					<Circle class="inline fill-black stroke-none" />
+				</label>
+				<label
+					class="rounded-xl px-2 py-1 shadow-lg shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
+				>
+					<input
+						type="radio"
+						value="squareRounded"
+						bind:group={selectedType}
+						class="appearance-none"
+					/>
+					Rounded Square
+					<Square class="inline fill-black stroke-none" />
+				</label>
+				<label
+					class="block rounded-xl px-2 py-1 shadow-lg shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
+				>
+					<input type="radio" value="square" bind:group={selectedType} class="  appearance-none" />
+					Square
+					<!-- svg rectangle square -->
+					<svg
+						width="20px"
+						height="20px"
+						class="inline-block"
+						viewBox="0 0 24 24"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<rect width="20" height="20" rx="0" fill="#000000" />
+					</svg>
+				</label>
+			</div>
+			<p class="mt-3">or</p>
+			<input
+				bind:value={ownSVG}
+				placeholder="Paste own SVG code to replace icon"
+				class="w-full rounded-lg px-2"
+			/>
 		</div>
 		<div class="mt-5">
 			<h3 class="font-semibold">Download</h3>
