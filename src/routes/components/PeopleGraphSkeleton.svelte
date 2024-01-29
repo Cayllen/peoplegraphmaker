@@ -25,12 +25,9 @@
 
 	export let type = 'People Graph';
 	let appName = type;
-	let rows = 10;
-	let rowsLabel = rows;
-	let columns = 10;
-	let columnsLabel = columns;
-	let xGap = 21;
-	let yGap = 25;
+	let rows, columns;
+	let rowsLabel, columnsLabel;
+	let xGap, yGap;
 	let canvas;
 	let zoom = 1;
 	let mounted = false;
@@ -38,6 +35,7 @@
 	let ownSVG = '';
 	let rtl = false; // TODO add as option
 	let downToUp = false; // TODO add as option
+	let colorInputs = [];
 	function reset() {
 		const defaultValues = {
 			rows: 10,
@@ -46,7 +44,8 @@
 			yGap: 25,
 			zoom: 1,
 			colorInputs: [
-				{ id: 'head', label: 'Head', value: '#e66465', colorUntil: 1 }
+				{ id: 'head', label: 'Head', value: '#BBBBBB', colorUntil: 50 },
+				{ id: 'head1', label: 'Head1', value: '#e66465', colorUntil: 99 }
 				// Add more color inputs as needed
 			],
 			rtl: false,
@@ -64,7 +63,7 @@
 		rtl = defaultValues.rtl;
 		downToUp = defaultValues.downToUp;
 	}
-
+	reset();
 	// look into https://jsfiddle.net/Maxyz/7mjnvh8u/24/ canvag for bringing in other svgs than just my own
 
 	function drawCanvas() {
@@ -134,10 +133,7 @@
 	}
 	let canvas2;
 	let canv2;
-	let colorInputs = [
-		{ id: 'head', label: 'Head', value: '#e66465', colorUntil: 1 }
-		// Add more color inputs as needed
-	];
+
 	onMount(() => {
 		// ctx = canvas.getContext('2d');
 		// drawCanvas();
