@@ -332,13 +332,17 @@
 		for (let j = 0; j < rows; j++) {
 			for (let i = 0; i < columns; i++) {
 				// this option reverses the id for each row
-				let dynamicID = rtl ? rows * (j + 1) - (i + 1) : id;
+				let dynamicID = rtl ? columns * (j + 1) - (i + 1) : id;
 				let dynamicID2 = downToUp ? rows * columns - dynamicID - 1 : dynamicID;
 
 				const ff = canv2.getObjects()[0]?.item(id);
+				// console.log(i, j, '+++id', id);
+				// console.log('dynamicid', dynamicID);
+
 				const newColorID = colorInputs.findIndex((input) => input.colorUntil > dynamicID2);
 				const colorInput = colorInputs[newColorID];
 				let nextColor = colorInputs[newColorID + 1];
+				// console.log('newColorID', newColorID, '+++');
 
 				if (
 					!Number.isInteger(colorInput.colorUntil) &&
