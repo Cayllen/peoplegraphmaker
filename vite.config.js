@@ -9,26 +9,7 @@ export default defineConfig({
         sveltekit()
 
     ],
-    // sentrySvelteKit({
-    // autoInstrument: false,
-    // sourceMapsUploadOptions: {
-    // 	org: 'ben-woodward',
-    // 	project: 'spoken-webapp',
-    // },
 
-    // ssr: {
-    //     noExternal: ['vanilla-cookieconsent']
-    // },
-    // build: {
-    //     target: 'esnext',
-    //     sourcemap: false,
-    //     minify: 'terser',
-    //     rollupOptions: {
-    //         output: {
-    //             sourcemap: 'hidden', // hide inline source maps
-    //         },
-    //     },
-    // },
     build: {
         sourcemap: false
     },

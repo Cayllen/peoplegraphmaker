@@ -9,11 +9,5 @@
 	 */
 	onMount(() => {
 		VCC.run(config);
-		// acceptCategory('all');
-		// if (window.navigator.userAgent.startsWith('SummarizeOneApp')) {
-		// 	hide();
-		// }
 	});
 </script>
-
-<!-- <button on:click={showPreferences}>Open consent preferences</button> -->
