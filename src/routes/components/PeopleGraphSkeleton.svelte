@@ -44,8 +44,8 @@
 			yGap: 25,
 			zoom: 1,
 			colorInputs: [
-				{ id: 'head', label: 'Head', value: '#BBBBBB', colorUntil: 50 },
-				{ id: 'head1', label: 'Head1', value: '#e66465', colorUntil: 99 }
+				{ id: 'head', label: 'Head', value: '#BBBBBB', colorUntil: 65.5 },
+				{ id: 'head1', label: 'Head1', value: '#e66465', colorUntil: 100 }
 				// Add more color inputs as needed
 			],
 			rtl: false,
