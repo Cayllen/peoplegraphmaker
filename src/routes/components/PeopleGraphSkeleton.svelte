@@ -5,7 +5,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { dev } from '$app/environment';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { ListFilter, LogIn, Send } from 'lucide-svelte';
+	import { GitGraph, ListFilter, LogIn, Send } from 'lucide-svelte';
 	import SubPageMetaTags from '$cmp/SubPageMetaTags.svelte';
 	import { draw } from 'svelte/transition';
 	import ColorPicker from '$cmp/ColorPicker.svelte';
@@ -146,7 +146,9 @@
 		canv2 = new StaticCanvas(canvas2, {
 			renderOnAddRemove: false,
 			imageSmoothingEnabled: true,
-			enableRetinaScaling: true
+			enableRetinaScaling: true,
+			perfLimitSizeTotal: 225000000,
+			maxCacheSideLimit: 11000
 		});
 
 		zoomCanvas();
@@ -218,7 +220,10 @@
 				);
 		}
 
-		const fullGroup = new Group([], { objectCaching: false, noScaleCache: true });
+		const fullGroup = new Group([], {
+			objectCaching: false,
+			noScaleCache: false
+		});
 		for (let j = 0; j < rows; j++) {
 			for (let i = 0; i < columns; i++) {
 				let group;
@@ -243,14 +248,14 @@
 					group = new Group(
 						[
 							path().set({
-								objectCaching: false,
-								statefullCache: false,
-								noScaleCache: true
+								// objectCaching: true,
+								// statefullCache: false
+								// noScaleCache: false
 							}),
 							path2().set({
-								objectCaching: false,
-								statefullCache: false,
-								noScaleCache: true
+								// objectCaching: true,
+								// statefullCache: false
+								// noScaleCache: false
 							})
 						],
 						{
@@ -269,22 +274,27 @@
 	}
 	let canvasWidth = 0;
 	let canvasHeight = 0;
+	let baseRatio = 1;
+	// this ratio makes sure things do not get too big
+	$: baseRatio = 1 / (1 + Math.pow(Math.E, 0.0015 * (rows * columns - 2000)));
 	function zoomCanvas() {
 		// maxbe reduce quality a bit..
 		console.log('zoomCanvas');
 
 		// let ratio = zoom * 0.9;
-		let ratio = zoom * 1.5;
+		let zoomRatio = zoom * baseRatio;
+
+		let ratio = zoomRatio;
 
 		canvasWidth = columns * xGap + 5;
 		canvasHeight = rows * yGap + 5;
 		canv2.setDimensions(
-			{ width: canvasWidth * ratio, height: canvasHeight * ratio },
-			{ cssOnly: false }
+			{ width: canvasWidth * zoomRatio + 'px', height: canvasHeight * zoomRatio + 'px' },
+			{ cssOnly: true, backstoreOnly: false }
 		);
 		canv2.setDimensions(
-			{ width: canvasWidth * zoom + 'px', height: canvasHeight * zoom + 'px' },
-			{ cssOnly: true, backstoreOnly: false }
+			{ width: canvasWidth * ratio, height: canvasHeight * ratio },
+			{ cssOnly: false }
 		);
 		canv2.setZoom(ratio);
 	}
@@ -299,7 +309,6 @@
 		for (let j = 0; j < rows; j++) {
 			for (let i = 0; i < columns; i++) {
 				let ff = canv2.getObjects()[0]?.item(idx);
-
 				ff.set({
 					left: i * xGap - centerPoints.x,
 					top: j * yGap - centerPoints.y
@@ -307,6 +316,7 @@
 				idx++;
 			}
 		}
+
 		canv2.renderAll();
 	}
 	function changeCanvasColor() {
@@ -392,8 +402,9 @@
 	// $: mounted && console.log(mounted, rows, columns, xGap, yGap, zoom, colorInputs);
 	// $: changed = mounted && (rows, columns) ? true : false;
 	$: mounted && (rows, columns, ownSVG, redraw());
-	$: mounted && (zoom, xGap, yGap, rows, columns, zoomCanvas());
 	$: mounted && (xGap, yGap, changeCanvasGap());
+	$: mounted && (zoom, xGap, yGap, rows, columns, zoomCanvas());
+
 	$: mounted && (colorInputs, rtl, downToUp, changeCanvasColor());
 	// $: colorInputs[colorInputs.length - 1].colorUntil = rows * columns;
 	// $: mounted && (rows, columns, xGap, yGap, zoom, colorInputs, drawCanvas());
@@ -457,7 +468,7 @@
 					id="rows"
 					name="rows"
 					min="0"
-					max="100"
+					max="50"
 					bind:value={rowsLabel}
 					on:mouseup={(e) => (rows = e.target.value)}
 					on:touchend={(e) => (rows = e.target.value)}
@@ -472,7 +483,7 @@
 					id="columns"
 					name="columns"
 					min="0"
-					max="100"
+					max="50"
 					bind:value={columnsLabel}
 					on:mouseup={(e) => (columns = e.target.value)}
 					on:touchend={(e) => (columns = e.target.value)}
@@ -495,12 +506,12 @@
 		</div>
 
 		<div>
-			<input type="range" id="zoom" bind:value={zoom} min="0.1" step="0.01" max="7" />
+			<input type="range" id="zoom" bind:value={zoom} min="0.1" step="0.01" max={7 * baseRatio} />
 			<label for="zoom">
 				Size: {canvasWidth
-					? Math.floor(canvasWidth * 1.5 * 2 * zoom) +
+					? Math.floor(canvasWidth * 2 * zoom * baseRatio) +
 						'px x ' +
-						Math.floor(canvasHeight * 1.5 * 2 * zoom) +
+						Math.floor(canvasHeight * 2 * zoom * baseRatio) +
 						'px'
 					: ''}
 			</label>
@@ -655,4 +666,6 @@
 		the Canny-Board
 	</p>
 	<Button href="https://peoplegraphmaker.canny.io/" target="_blank">Request a feature HERE</Button>
+	or contribute yourself
+	<Button href="https://github.com/Cayllen/peoplegraphmaker" target="_blank">on GitHub</Button>
 </section>

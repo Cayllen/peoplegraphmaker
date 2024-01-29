@@ -1,0 +1,5 @@
+<script lang="ts">
+	import PeopleGraphSkeleton from '$cmp/PeopleGraphSkeleton.svelte';
+</script>
+
+<PeopleGraphSkeleton type="Icon Array" />
