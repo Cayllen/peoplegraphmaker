@@ -136,72 +136,72 @@
 </script>
 
 <svelte:window on:scroll={handleOnScroll} />
-{#if show}
-	<div class="relative -z-20 min-h-max bg-gray-200">
-		<section class="relative overflow-hidden">
-			<Header {navigationMenu} />
-			<div class="relative -z-10 opacity-50">
-				<svg
-					class="absolute top-0 sm:-right-72"
-					width="800"
-					height="502"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
-					<circle
-						cx="400"
-						cy="102"
-						r="400"
-						fill="url(#heroglow_paint0_radial)"
-						fill-opacity=".6"
-					></circle>
-					<circle
-						cx="209"
-						cy="289"
-						r="170"
-						fill="url(#heroglow_paint1_radial)"
-						fill-opacity=".4"
-					></circle>
-					<defs>
-						<radialGradient
-							id="heroglow_paint0_radial"
-							cx="0"
-							cy="0"
-							r="1"
-							gradientUnits="userSpaceOnUse"
-							gradientTransform="rotate(90 149 251) scale(315.089)"
-						>
-							<stop stop-color="#3ABAB4"></stop>
-							<stop offset="1" stop-color="#3ABAB4" stop-opacity=".01"></stop>
-						</radialGradient>
-						<radialGradient
-							id="heroglow_paint1_radial"
-							cx="0"
-							cy="0"
-							r="1"
-							gradientUnits="userSpaceOnUse"
-							gradientTransform="rotate(90 -40 249) scale(133.913)"
-						>
-							<stop stop-color="#667EEA"></stop>
-							<stop offset="1" stop-color="#667EEA" stop-opacity=".01"></stop>
-						</radialGradient>
-					</defs>
-				</svg>
-			</div>
+<!-- {#if show} -->
+<div class="relative -z-20 min-h-max bg-gray-200">
+	<section class="relative overflow-hidden">
+		<Header {navigationMenu} />
+		<div class="relative -z-10 opacity-50">
+			<svg
+				class="absolute top-0 sm:-right-72"
+				width="800"
+				height="502"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<circle
+					cx="400"
+					cy="102"
+					r="400"
+					fill="url(#heroglow_paint0_radial)"
+					fill-opacity=".6"
+				></circle>
+				<circle
+					cx="209"
+					cy="289"
+					r="170"
+					fill="url(#heroglow_paint1_radial)"
+					fill-opacity=".4"
+				></circle>
+				<defs>
+					<radialGradient
+						id="heroglow_paint0_radial"
+						cx="0"
+						cy="0"
+						r="1"
+						gradientUnits="userSpaceOnUse"
+						gradientTransform="rotate(90 149 251) scale(315.089)"
+					>
+						<stop stop-color="#3ABAB4"></stop>
+						<stop offset="1" stop-color="#3ABAB4" stop-opacity=".01"></stop>
+					</radialGradient>
+					<radialGradient
+						id="heroglow_paint1_radial"
+						cx="0"
+						cy="0"
+						r="1"
+						gradientUnits="userSpaceOnUse"
+						gradientTransform="rotate(90 -40 249) scale(133.913)"
+					>
+						<stop stop-color="#667EEA"></stop>
+						<stop offset="1" stop-color="#667EEA" stop-opacity=".01"></stop>
+					</radialGradient>
+				</defs>
+			</svg>
+		</div>
 
-			<slot />
-			<FooterNew {navigationMenu} />
-		</section>
-	</div>
-	<!-- ====== Back To Top Start -->
-	<a
-		href={'#'}
-		class="back-to-top fixed bottom-8 left-auto right-8 z-[999] hidden h-10 w-10 items-center justify-center rounded-md bg-primary text-third shadow-md transition duration-300 ease-in-out hover:bg-secondary"
-	>
-		<span class="mt-[6px] h-3 w-3 rotate-45 border-l border-t border-third" />
-	</a>
-	<CookieConsentComponent />
-{/if}
+		<slot />
+		<FooterNew {navigationMenu} />
+	</section>
+</div>
+<!-- ====== Back To Top Start -->
+<a
+	href={'#'}
+	class="back-to-top fixed bottom-8 left-auto right-8 z-[999] hidden h-10 w-10 items-center justify-center rounded-md bg-primary text-third shadow-md transition duration-300 ease-in-out hover:bg-secondary"
+>
+	<span class="mt-[6px] h-3 w-3 rotate-45 border-l border-t border-third" />
+</a>
+<CookieConsentComponent />
+<!-- {/if} -->
 
 <!-- ====== Back To Top End -->
 
@@ -212,18 +212,18 @@
 	<meta name="keywords" content="" />
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://peoplegraphmaker.com" />
 
 	<meta property="og:image" content="https://peoplegraphmaker.com/preview.png" />
 	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="600" />
+	<meta property="og:image" content="https://peoplegraphmaker.com/preview_1_1.png" />
+	<meta property="og:image:width" content="600" />
 	<meta property="og:image:height" content="600" />
 
 	<meta name="msapplication-TileImage" content="https://peoplegraphmaker.com/preview.png" />
 
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta property="twitter:url" content="https://peoplegraphmaker.com" />
-	<meta property="twitter:domain" content="peoplegraphmaker.com" />
 
 	<meta name="twitter:image" content="https://peoplegraphmaker.com/preview.png" />
 </svelte:head>

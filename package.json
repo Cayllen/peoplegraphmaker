@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "vite dev --host",
 		"build": "vite build",
-		"postbuild": "npx svelte-sitemap --domain https://peoplegraphmaker.com --trailing-slashes --out-dir .svelte-kit/cloudflare --reset-time --change-freq weekly",
+		"postbuild": "npx svelte-sitemap --domain https://peoplegraphmaker.com --out-dir .svelte-kit/cloudflare --reset-time --change-freq weekly -i /privacy-policy -i /terms-of-service",
 		"preview": "vite preview",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --write .",

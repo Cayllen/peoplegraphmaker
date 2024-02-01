@@ -1,8 +1,11 @@
 <script>
+	import { page } from '$app/stores';
+
 	// NOTE: This section is meant to be placed on every page. This puts the correct meta tags on every page.
 	export let pageTitle;
 	export let pageDescription;
 	export let pageKeywords = '';
+	console.log($page.url);
 </script>
 
 <svelte:head>
@@ -21,4 +24,6 @@
 	<!-- Twitter -->
 	<meta name="twitter:title" content={pageTitle} />
 	<meta name="twitter:description" content={pageDescription} />
+
+	<meta property="og:url" content={$page.url.origin + $page.url.pathname} />
 </svelte:head>

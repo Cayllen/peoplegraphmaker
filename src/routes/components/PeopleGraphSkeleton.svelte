@@ -4,6 +4,7 @@
 
 	import SubPageMetaTags from '$cmp/SubPageMetaTags.svelte';
 	import ColorPicker from '$cmp/ColorPicker.svelte';
+
 	import {
 		Canvas,
 		StaticCanvas,
@@ -352,7 +353,7 @@
 					dynamicID2 === Math.floor(colorInput.colorUntil)
 				) {
 					const afterComma = Math.abs(colorInput.colorUntil) - Math.floor(colorInput.colorUntil);
-					console.log(ff);
+					// console.log(ff);
 
 					var gradient = new Gradient({
 						type: 'linear',
