@@ -548,21 +548,21 @@
 			<h2 class=" mb-2 font-semibold">Icon</h2>
 			<div class="flex max-w-full flex-row flex-wrap gap-3">
 				<label
-					class="rounded-xl px-2 py-1 shadow-xl shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
+					class="cursor-pointer rounded-xl px-2 py-1 shadow-xl shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
 				>
 					<input type="radio" value="person" bind:group={selectedType} class="appearance-none" />
 					Person
 					<User class="inline fill-black stroke-none" />
 				</label>
 				<label
-					class="rounded-xl px-2 py-1 shadow-xl shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
+					class="cursor-pointer rounded-xl px-2 py-1 shadow-xl shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
 				>
 					<input type="radio" value="circle" bind:group={selectedType} class="appearance-none" />
 					Circle
 					<Circle class="inline fill-black stroke-none" />
 				</label>
 				<label
-					class="rounded-xl px-2 py-1 shadow-lg shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
+					class="cursor-pointer rounded-xl px-2 py-1 shadow-lg shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
 				>
 					<input
 						type="radio"
@@ -574,7 +574,7 @@
 					<Square class="inline fill-black stroke-none" />
 				</label>
 				<label
-					class="block rounded-xl px-2 py-1 shadow-lg shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
+					class="block cursor-pointer rounded-xl px-2 py-1 shadow-lg shadow-gray-400 has-[:checked]:ring-1 has-[:checked]:ring-black"
 				>
 					<input type="radio" value="square" bind:group={selectedType} class="  appearance-none" />
 					Square
