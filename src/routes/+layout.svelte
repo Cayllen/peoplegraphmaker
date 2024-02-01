@@ -212,6 +212,7 @@
 	<meta name="keywords" content="" />
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="People Graph Maker" />
 
 	<meta property="og:image" content="https://peoplegraphmaker.com/preview.png" />
 	<meta property="og:image:width" content="1200" />

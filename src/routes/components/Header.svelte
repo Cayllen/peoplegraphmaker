@@ -7,12 +7,9 @@
 		<div class="relative -mx-4 flex items-center justify-between">
 			<div class="w-96 max-w-full px-4">
 				<a href="/" class="ud-menu-scroll navbar-logo flex w-full flex-row items-center py-2">
-					<!-- <img
-                        class="w-12 h-12 mr-2"
-                        src="/images/logo/PersonGraphMaker_Logo_horiz_wht.svg"
-                        alt="PersonGraphMaker.com" -->
+					<img class="mr-2 h-7 w-7" src="$lib/images/logo.png" alt="PersonGraphMaker.com Logo" />
 					<p
-						class="header-logo bg-gradient-to-r from-sky-200 to-yellow-600 bg-clip-text text-xl font-extrabold tracking-wide text-transparent"
+						class="header-logo bg-gradient-to-r from-sky-200 to-yellow-500 bg-clip-text text-xl font-extrabold tracking-wide text-transparent"
 					>
 						PeopleGraphMaker.com
 					</p>
