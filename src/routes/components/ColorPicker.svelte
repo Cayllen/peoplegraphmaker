@@ -86,8 +86,9 @@
 				/>
 				PPL -->
 						</p>
+					{:else}
+						{ii === 0 ? 'Full Icons' : 'Half Icons'}
 					{/if}
-					{ii === 0 ? 'Full Icons' : 'Half Icons'}
 				</div>
 			</div>
 			{#if !barChartMode}
