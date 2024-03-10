@@ -33,7 +33,7 @@
 							{#each navigationMenu as { name, anchor, link }}
 								<li class="group relative">
 									<a
-										href={link.length > 0 ? '/' + link : '#' + anchor}
+										href={link.length > 0 ? '/' + link : '/#' + anchor}
 										class="{link.length > 0
 											? ''
 											: 'ud-menu-scroll'} mx-8 flex whitespace-nowrap py-2 text-base text-dark group-hover:text-third-hover xl:mr-0 xl:inline-flex xl:px-0 xl:py-2 xl:text-third xl:group-hover:text-third-hover xl:group-hover:opacity-70 2xl:ml-12"
