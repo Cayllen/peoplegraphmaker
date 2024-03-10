@@ -22,6 +22,7 @@
 
 	export let type = 'People Graph';
 	let appName = type;
+	let barChartMode = false;
 	let rows, columns;
 	let rowsLabel, columnsLabel;
 	let xGap, yGap;
@@ -34,6 +35,8 @@
 	let downToUp = false; // TODO add as option
 	let colorInputs = [];
 	let selectedType;
+	let numberArray = [4.5, 21, 2.5, 16, 5, 3];
+	let inputNumberArray = '4.5\n21\n2.5\n16\n5\n3';
 	const iconTypes = {
 		person: generatePerson(),
 		circle: generateCircle(),
@@ -72,16 +75,28 @@
 	}
 	function reset() {
 		const defaultValues = {
-			rows: 10,
-			columns: 10,
+			rows: barChartMode ? numberArray.length : 10,
+			columns: barChartMode ? Math.ceil(Math.max(...numberArray)) : 10,
 			xGap: 21,
 			yGap: 25,
 			zoom: 1,
 			colorInputs: [
-				{ id: 'head', label: 'Head', value: '#BBBBBB', colorUntil: 65.5 },
-				{ id: 'head1', label: 'Head1', value: '#e66465', colorUntil: 100 }
+				{
+					id: 'head',
+					label: 'Head',
+					value: barChartMode ? '#e66465' : '#BBBBBB',
+					colorUntil: 65.5
+				},
+				{
+					id: 'head1',
+					label: 'Head1',
+					value: barChartMode ? '#BBBBBB' : '#e66465',
+					colorUntil: 100
+				}
 				// Add more color inputs as needed
 			],
+			numberArray: [4.5, 21, 2.5, 16, 5, 3],
+			inputNumberArray: '4.5\n21\n2.5\n16\n5\n3',
 			rtl: false,
 			downToUp: false,
 			selectedType: 'person',
@@ -96,6 +111,8 @@
 		colorInputs = defaultValues.colorInputs;
 		columnsLabel = columns;
 		rowsLabel = rows;
+		numberArray = defaultValues.numberArray;
+		inputNumberArray = defaultValues.inputNumberArray;
 		rtl = defaultValues.rtl;
 		downToUp = defaultValues.downToUp;
 		selectedType = defaultValues.selectedType;
@@ -104,71 +121,6 @@
 	reset();
 	// look into https://jsfiddle.net/Maxyz/7mjnvh8u/24/ canvag for bringing in other svgs than just my own
 
-	function drawCanvas() {
-		// if (!changed) return;
-		colorInputs[colorInputs.length - 1].colorUntil = rows * columns;
-		const ratio = 2 + zoom * 1.5;
-		const width = columns * xGap + 5;
-		const height = rows * yGap + 5;
-
-		canvas.width = width * ratio;
-		canvas.height = height * ratio;
-		canvas.style.width = width * zoom + 'px';
-		canvas.style.height = height * zoom + 'px';
-		ctx.scale(ratio, ratio);
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-		applyToContext(ctx);
-		// requestAnimationFrame(drawCanvas);
-		// var img = new Image();
-		// img.src = canvas.toDataURL('image/png');
-		// img.alt = 'downloaded-from-image';
-
-		// // document.body.appendChild(img);
-		// test123.src = canvas.toDataURL('image/png');
-		// test123.height = height * zoom;
-		// test123.width = width * zoom;
-		// console.log(height, width);
-	}
-	function applyToContext(ctx) {
-		let currentID = 0;
-
-		let path1 = new Path2D(
-			'M12 1C8.96243 1 6.5 3.46243 6.5 6.5C6.5 9.53757 8.96243 12 12 12C15.0376 12 17.5 9.53757 17.5 6.5C17.5 3.46243 15.0376 1 12 1Z'
-		);
-		let path2 = new Path2D(
-			'M7 14C4.23858 14 2 16.2386 2 19V22C2 22.5523 2.44772 23 3 23H21C21.5523 23 22 22.5523 22 22V19C22 16.2386 19.7614 14 17 14H7Z'
-		);
-		path1.addPath(path2);
-
-		// canvas.width = width;
-		// canvas.height = height;
-		// ctx.fillStyle = '#FF00FF';
-		// ctx.fillRect(0, 0, canvas.width, canvas.height);
-		ctx.save();
-		// ctx.scale(5, 5);
-		for (let j = 0; j < rows; j++) {
-			ctx.save();
-			for (let i = 0; i < columns; i++) {
-				const id = currentID++;
-
-				const colorInput = colorInputs.find((input) => input.colorUntil > id) || {
-					value: '#000000'
-				};
-
-				const fill = colorInput.value;
-
-				ctx.fillStyle = fill;
-
-				ctx.fill(path1);
-				if (i < columns) ctx.translate(xGap, 0);
-			}
-			ctx.restore();
-			ctx.translate(0, yGap);
-		}
-
-		ctx.restore();
-	}
 	let canvas2;
 	let canv2;
 
@@ -203,33 +155,6 @@
 		// redraw();
 		mounted = true;
 	});
-	let changed = false;
-	function zoom2(width) {
-		var scale = width / canv2.getWidth();
-		let height = scale * canv2.getHeight();
-
-		canv2.setDimensions({
-			'width': width,
-			'height': height
-		});
-
-		canv2.calcOffset();
-		var objects = canv2.getObjects();
-		for (var i in objects) {
-			var scaleX = objects[i].scaleX;
-			var scaleY = objects[i].scaleY;
-			var left = objects[i].left;
-			var top = objects[i].top;
-
-			objects[i].scaleX = scaleX * scale;
-			objects[i].scaleY = scaleY * scale;
-			objects[i].left = left * scale;
-			objects[i].top = top * scale;
-
-			objects[i].setCoords();
-		}
-		canv2.renderAll();
-	}
 	async function redraw() {
 		// colorInputs[colorInputs.length - 1].colorUntil = rows * columns;
 
@@ -249,7 +174,7 @@
 			noScaleCache: false
 		});
 		for (let j = 0; j < rows; j++) {
-			for (let i = 0; i < columns; i++) {
+			for (let i = 0; i < (barChartMode ? Math.ceil(numberArray[j]) : columns); i++) {
 				let group;
 				if (ownSVG.length) {
 					group = await svgData.clone().then(
@@ -313,7 +238,7 @@
 
 		let idx = 0;
 		for (let j = 0; j < rows; j++) {
-			for (let i = 0; i < columns; i++) {
+			for (let i = 0; i < (barChartMode ? Math.ceil(numberArray[j]) : columns); i++) {
 				let ff = canv2.getObjects()[0]?.item(idx);
 				ff.set({
 					left: i * xGap - centerPoints.x,
@@ -328,59 +253,102 @@
 	}
 	function changeCanvasColor() {
 		colorInputs[colorInputs.length - 1].colorUntil = rows * columns;
-
 		if (!canv2.getObjects()[0]) return;
 		console.log('changeCanvasColor');
 		let id = 0;
 
+		function getAdjustedColoringPercentage(svgItem, afterComma, isFirst) {
+			if (!svgItem.item(1)?.width ?? svgItem.item(1)?.height) return afterComma;
+			const sizeArr = [
+				svgItem.item(0)?.width ?? svgItem.item(0).height,
+				svgItem.item(1)?.width ?? svgItem.item(1)?.height
+			];
+
+			const maxItem = Math.max(...sizeArr);
+			const indexOfMaxItem = sizeArr.indexOf(maxItem);
+
+			delete sizeArr[maxItem];
+			const smallerItem = sizeArr[0];
+
+			const buffer = (maxItem - smallerItem) / 2;
+			if ((isFirst && indexOfMaxItem === 0) || (!isFirst && indexOfMaxItem === 1))
+				return afterComma;
+			if (afterComma * maxItem >= buffer + smallerItem) {
+				return 1;
+			} else if (afterComma * maxItem <= buffer) {
+				return 0;
+			} else {
+				return (afterComma * maxItem - buffer) / smallerItem;
+			}
+		}
+
 		for (let j = 0; j < rows; j++) {
-			for (let i = 0; i < columns; i++) {
+			for (let i = 0; i < (barChartMode ? Math.ceil(numberArray[j]) : columns); i++) {
 				// this option reverses the id for each row
 				let dynamicID = rtl ? columns * (j + 1) - (i + 1) : id;
 				let dynamicID2 = downToUp ? rows * columns - dynamicID - 1 : dynamicID;
 
 				const ff = canv2.getObjects()[0]?.item(id);
-				// console.log(i, j, '+++id', id);
-				// console.log('dynamicid', dynamicID);
+				let colorInput, nextColor, isFloatToColor, afterComma;
+				if (barChartMode) {
+					colorInput = rtl ? colorInputs[1] : colorInputs[0];
+					nextColor = rtl ? colorInputs[0] : colorInputs[1];
+					isFloatToColor = !Number.isInteger(numberArray[j]) && i === Math.floor(numberArray[j]);
+					afterComma = Math.abs(numberArray[j]) - Math.floor(numberArray[j]);
+				} else {
+					const newColorID = colorInputs.findIndex((input) => input.colorUntil > dynamicID2);
+					colorInput = colorInputs[newColorID];
+					nextColor = colorInputs[newColorID + 1];
+					isFloatToColor =
+						!Number.isInteger(colorInput.colorUntil) &&
+						dynamicID2 === Math.floor(colorInput.colorUntil);
+					afterComma = Math.abs(colorInput.colorUntil) - Math.floor(colorInput.colorUntil);
+				}
 
-				const newColorID = colorInputs.findIndex((input) => input.colorUntil > dynamicID2);
-				const colorInput = colorInputs[newColorID];
-				let nextColor = colorInputs[newColorID + 1];
-				// console.log('newColorID', newColorID, '+++');
-
-				if (
-					!Number.isInteger(colorInput.colorUntil) &&
-					dynamicID2 === Math.floor(colorInput.colorUntil)
-				) {
-					const afterComma = Math.abs(colorInput.colorUntil) - Math.floor(colorInput.colorUntil);
-					// console.log(ff);
-
+				if (isFloatToColor) {
 					var gradient = new Gradient({
 						type: 'linear',
 						gradientUnits: 'pixels', // or 'percentage'
-						coords: { x1: 0, y1: 0, x2: ff.item(0)?.width ?? ff.item(0).height, y2: 0 },
+						coords: {
+							x1: 0,
+							y1: 0,
+							x2: ff.item(0)?.width ?? ff.item(0).height,
+							y2: 0
+						},
 						colorStops: [
-							{ offset: afterComma, color: colorInput.value },
-							{ offset: 1 - afterComma, color: nextColor.value }
+							{
+								offset: getAdjustedColoringPercentage(ff, afterComma, true),
+								color: colorInput.value
+							},
+							{
+								offset: getAdjustedColoringPercentage(ff, afterComma, true),
+								color: nextColor.value
+							}
 						]
 					});
 					var gradient2 = new Gradient({
 						type: 'linear',
 						gradientUnits: 'pixels', // or 'percentage'
-						coords: { x1: 0, y1: 0, x2: ff.item(1)?.width ?? ff.item(1)?.height, y2: 0 },
+						coords: {
+							x1: 0,
+							y1: 0,
+							x2: ff.item(1)?.width ?? ff.item(1)?.height,
+							y2: 0
+						},
 						colorStops: [
-							{ offset: afterComma, color: colorInput.value },
-							{ offset: 1 - afterComma, color: nextColor.value }
+							{
+								offset: getAdjustedColoringPercentage(ff, afterComma, false),
+								color: colorInput.value
+							},
+							{
+								offset: getAdjustedColoringPercentage(ff, afterComma, false),
+								color: nextColor.value
+							}
 						]
 					});
-					if (rtl !== downToUp) {
-						gradient.colorStops.reverse();
-						gradient2.colorStops.reverse();
-					}
+
 					// TODO: add option to set color of either fill or stroke or both
 					// NOTE: SUPER UGLY METHOD to color stuff because apparently one has to color every single path
-					// ff.item(0).set({ fill: gradient });
-					// ff.item(1)?.set({ fill: gradient2 });
 
 					!!ff._objects
 						? ff._objects.forEach((num, idx, arr) => {
@@ -414,11 +382,20 @@
 	}
 	// $: mounted && console.log(mounted, rows, columns, xGap, yGap, zoom, colorInputs);
 	// $: changed = mounted && (rows, columns) ? true : false;
-	$: mounted && (rows, columns, selectedType, ownSVG, redraw());
+	$: mounted && (rows, columns, selectedType, ownSVG, inputNumberArray, redraw());
 	$: mounted && (xGap, yGap, changeCanvasGap());
 	$: mounted && (zoom, xGap, yGap, rows, columns, zoomCanvas());
 
 	$: mounted && (colorInputs, rtl, downToUp, changeCanvasColor());
+	$: mounted &&
+		barChartMode &&
+		((numberArray = inputNumberArray
+			.split('\n')
+			.map(Number)
+			.filter((value) => !Number.isNaN(value))),
+		(rows = numberArray.length),
+		(columns = Math.ceil(Math.max(...numberArray))));
+
 	// $: colorInputs[colorInputs.length - 1].colorUntil = rows * columns;
 	// $: mounted && (rows, columns, xGap, yGap, zoom, colorInputs, drawCanvas());
 	//
@@ -431,15 +408,7 @@
 
 		//convert the existing canvas to an svg element and download it
 	}
-	function downloadSVGAsText() {
-		const svg = document.querySelector('svg');
-		const base64doc = btoa(unescape(encodeURIComponent(svg.outerHTML)));
-		const a = document.createElement('a');
-		const e = new MouseEvent('click');
-		a.download = 'download.svg';
-		a.href = 'data:image/svg+xml;base64,' + base64doc;
-		a.dispatchEvent(e);
-	}
+
 	function downloadCanvasAsPNG(e) {
 		// canv2.scale(30);
 
@@ -475,41 +444,86 @@
 	<div class="flex shrink-0 flex-col gap-5">
 		<div class="">
 			<h1 class="mb-5 text-center text-2xl font-light">Create your {typeF()} in Seconds</h1>
+			<div class="pb-5">
+				<Button
+					class=" bg-transparent text-black shadow-xl shadow-gray-400 ring-1 hover:bg-transparent  {!barChartMode
+						? 'ring-black'
+						: 'ring-0'}"
+					on:click={() => {
+						barChartMode = false;
+						reset();
+					}}
+				>
+					100%-Chart Mode
+					<img src="" />
+				</Button>
+				<Button
+					class=" bg-transparent text-black  shadow-xl shadow-gray-400 ring-1 hover:bg-transparent  {barChartMode
+						? 'ring-black'
+						: 'ring-0'}"
+					on:click={() => {
+						barChartMode = true;
+						reset();
+					}}
+				>
+					Bar-Chart Mode
+					<img src="" />
+				</Button>
+			</div>
 			<div class="inline">
 				<h2 class="inline font-semibold">Settings</h2>
 				<Button variant="secondary" on:click={() => reset()} class=" h-6 px-2">Reset</Button>
 			</div>
+			{#if !barChartMode}
+				<div class="mt-2">
+					<input
+						type="range"
+						id="rows"
+						name="rows"
+						min="0"
+						max="50"
+						bind:value={rowsLabel}
+						on:mouseup={(e) => (rows = e.target.value)}
+						on:touchend={(e) => (rows = e.target.value)}
+						step="1"
+					/>
+					<label for="rows">Rows {rowsLabel}</label>
+				</div>
 
-			<div class="mt-2">
-				<input
-					type="range"
-					id="rows"
-					name="rows"
-					min="0"
-					max="50"
-					bind:value={rowsLabel}
-					on:mouseup={(e) => (rows = e.target.value)}
-					on:touchend={(e) => (rows = e.target.value)}
-					step="1"
-				/>
-				<label for="rows">Rows {rowsLabel}</label>
-			</div>
+				<div>
+					<input
+						type="range"
+						id="columns"
+						name="columns"
+						min="0"
+						max="50"
+						bind:value={columnsLabel}
+						on:mouseup={(e) => (columns = e.target.value)}
+						on:touchend={(e) => (columns = e.target.value)}
+						step="1"
+					/>
 
-			<div>
-				<input
-					type="range"
-					id="columns"
-					name="columns"
-					min="0"
-					max="50"
-					bind:value={columnsLabel}
-					on:mouseup={(e) => (columns = e.target.value)}
-					on:touchend={(e) => (columns = e.target.value)}
-					step="1"
-				/>
+					<label for="columns">Columns {columnsLabel}</label>
+				</div>
+			{:else}
+				<div class="mt-5 flex flex-col">
+					<label for="inputNumberArray">Rows (use . separator -> 4.5)</label>
 
-				<label for="columns">Columns {columnsLabel}</label>
-			</div>
+					<textarea
+						class="w-min resize-y rounded-lg p-2"
+						bind:value={inputNumberArray}
+						placeholder=""
+						rows="10"
+						cols="7"
+						id="inputNumberArray"
+					></textarea>
+					<!-- <div class="min-h-36 w-32 rounded-lg bg-white p-2" contenteditable="true" bind:this={inp}>
+						{#each [] as ii}
+							<hr />
+						{/each}
+					</div> -->
+				</div>
+			{/if}
 		</div>
 
 		<div>
@@ -534,15 +548,17 @@
 					: ''}
 			</label>
 		</div>
-		<ColorPicker bind:colorInputs maxPpl={rows * columns} />
+		<ColorPicker bind:colorInputs maxPpl={rows * columns} {barChartMode} />
 
 		<div>
 			<h2 class="font-semibold">Orientation</h2>
 
 			<input type="checkbox" name="flipY" bind:checked={rtl} id="" />
 			<label for="flipY">Flip Horizontal</label>
-			<input type="checkbox" name="flipX" bind:checked={downToUp} id="" />
-			<label for="flipX">Flip Vertical</label>
+			{#if !barChartMode}
+				<input type="checkbox" name="flipX" bind:checked={downToUp} id="" />
+				<label for="flipX">Flip Vertical</label>
+			{/if}
 		</div>
 		<div>
 			<h2 class=" mb-2 font-semibold">Icon</h2>

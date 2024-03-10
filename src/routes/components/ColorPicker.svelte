@@ -1,6 +1,7 @@
 <script>
 	export let colorInputs;
 	export let maxPpl;
+	export let barChartMode = false;
 	import { Input } from '$lib/components/ui/input';
 
 	import { Button } from '$lib/components/ui/button';
@@ -41,37 +42,41 @@
 			<div class="flex flex-1 flex-col gap-1 self-center">
 				<div>
 					<input class="w-1/4" type="color" bind:value {id} />
-
-					<input
-						hidden={ii === colorInputs.length - 1}
-						type="range"
-						step="0.5"
-						bind:value={colorUntil}
-						min={colorInputs[ii - 1]?.colorUntil + 1 || 1}
-						max={colorInputs[ii + 1]?.colorUntil || maxPpl}
-					/>
-					<input
-						type="number"
-						hidden={ii === colorInputs.length - 1}
-						bind:value={colorUntil}
-						class="w-20 bg-slate-300 text-center"
-						min={colorInputs[ii - 1]?.colorUntil + 1 || 1}
-						max={colorInputs[ii + 1]?.colorUntil || maxPpl}
-						id=""
-					/>
+					{#if !barChartMode}
+						<input
+							hidden={ii === colorInputs.length - 1}
+							type="range"
+							step="0.5"
+							bind:value={colorUntil}
+							min={colorInputs[ii - 1]?.colorUntil + 1 || 1}
+							max={colorInputs[ii + 1]?.colorUntil || maxPpl}
+						/>
+						<input
+							type="number"
+							hidden={ii === colorInputs.length - 1}
+							bind:value={colorUntil}
+							class="w-20 bg-slate-300 text-center"
+							min={colorInputs[ii - 1]?.colorUntil + 1 || 1}
+							max={colorInputs[ii + 1]?.colorUntil || maxPpl}
+							id=""
+						/>
+					{/if}
 				</div>
+
 				<div class="flex flex-row gap-2">
 					<!-- {colorInputs[ii - 1]?.colorUntil + 1 || 1} -->
 					<!-- <label for={id}>{label}</label> -->
-					<p class="basis-1/2">
-						{getColorPositionOutput(
-							colorInputs[ii - 1]?.colorUntil + 1 || 1,
-							colorUntil > maxPpl ? maxPpl : colorUntil
-						)}
-					</p>
-					<p class="">
-						{(colorUntil > maxPpl ? maxPpl : colorUntil) - (colorInputs[ii - 1]?.colorUntil || 0)} Total
-						<!-- <input
+					{#if !barChartMode}
+						<p class="basis-1/2">
+							{getColorPositionOutput(
+								colorInputs[ii - 1]?.colorUntil + 1 || 1,
+								colorUntil > maxPpl ? maxPpl : colorUntil
+							)}
+						</p>
+						<p class="">
+							{(colorUntil > maxPpl ? maxPpl : colorUntil) - (colorInputs[ii - 1]?.colorUntil || 0)}
+							Total
+							<!-- <input
 					type="number"
 					min={colorInputs[ii - 1]?.colorUntil + 1 || 1}
 					max={colorInputs[ii + 1]?.colorUntil || maxPpl}
@@ -80,18 +85,24 @@
 					id=""
 				/>
 				PPL -->
-					</p>
+						</p>
+					{/if}
+					{ii === 0 ? 'Full Icons' : 'Half Icons'}
 				</div>
 			</div>
-			<Button
-				variant="destructive"
-				class="w-fit px-2 {colorInputs.length > 1 ? 'visible' : 'invisible'}"
-				on:click={() => handleRemoveColor(ii)}
-			>
-				<Trash2 strokeWidth="1" size="20" />
-			</Button>
+			{#if !barChartMode}
+				<Button
+					variant="destructive"
+					class="w-fit px-2 {colorInputs.length > 1 ? 'visible' : 'invisible'}"
+					on:click={() => handleRemoveColor(ii)}
+				>
+					<Trash2 strokeWidth="1" size="20" />
+				</Button>
+			{/if}
 		</div>
 		<hr class={colorInputs.length - 1 === ii ? 'hidden' : 'mx-5 h-[2px] bg-black/20'} />
 	{/each}
-	<Button on:click={handleAddColor} variant="" class="w-32 opacity-70 ">Add Color</Button>
+	{#if !barChartMode}
+		<Button on:click={handleAddColor} variant="" class="w-32 opacity-70 ">Add Color</Button>
+	{/if}
 </div>

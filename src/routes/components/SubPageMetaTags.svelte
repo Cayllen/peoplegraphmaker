@@ -5,7 +5,6 @@
 	export let pageTitle;
 	export let pageDescription;
 	export let pageKeywords = '';
-	console.log($page.url);
 </script>
 
 <svelte:head>
