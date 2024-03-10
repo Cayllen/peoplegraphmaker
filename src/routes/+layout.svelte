@@ -96,7 +96,8 @@
 		{ name: 'People Graph', anchor: '', link: './' },
 		{ name: 'People Diagram', anchor: '', link: 'people-diagram' },
 		{ name: 'People Chart', anchor: '', link: 'people-chart' },
-		{ name: 'Icon Array', anchor: '', link: 'icon-array' }
+		{ name: 'Icon Array', anchor: '', link: 'icon-array' },
+		{ name: 'Suggest Feature', anchor: 'suggestfeature', link: '' }
 
 		// { name: $_('Layout.navigationmenu.faq'), anchor: 'faq' }
 	];

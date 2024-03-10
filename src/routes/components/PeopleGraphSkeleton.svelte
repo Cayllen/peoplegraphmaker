@@ -35,8 +35,8 @@
 	let downToUp = false; // TODO add as option
 	let colorInputs = [];
 	let selectedType;
-	let numberArray = [4.5, 21, 2.5, 16, 5, 3];
-	let inputNumberArray = '4.5\n21\n2.5\n16\n5\n3';
+	let numberArray = [4.5, 13, 2.5, 15, 5, 3];
+	let inputNumberArray = '4.5\n13\n2.5\n15\n5\n3';
 	const iconTypes = {
 		person: generatePerson(),
 		circle: generateCircle(),
@@ -95,8 +95,8 @@
 				}
 				// Add more color inputs as needed
 			],
-			numberArray: [4.5, 21, 2.5, 16, 5, 3],
-			inputNumberArray: '4.5\n21\n2.5\n16\n5\n3',
+			numberArray: [4.5, 13, 2.5, 15, 5, 3],
+			inputNumberArray: '4.5\n13\n2.5\n15\n5\n3',
 			rtl: false,
 			downToUp: false,
 			selectedType: 'person',
@@ -454,8 +454,8 @@
 						reset();
 					}}
 				>
-					100%-Chart Mode
-					<img src="" />
+					100%-Chart
+					<img src="$lib/images/mode_100.png" alt="100% chart" class="ml-2 h-9" />
 				</Button>
 				<Button
 					class=" bg-transparent text-black  shadow-xl shadow-gray-400 ring-1 hover:bg-transparent  {barChartMode
@@ -466,8 +466,8 @@
 						reset();
 					}}
 				>
-					Bar-Chart Mode
-					<img src="" />
+					Bar-Chart
+					<img src="$lib/images/mode_bar.png" alt="Bar chart" class="ml-2 h-8" />
 				</Button>
 			</div>
 			<div class="inline">
@@ -745,7 +745,7 @@
 		</li>
 	</ol>
 </section>
-<section class="prose z-10 mx-5 flex flex-col gap-5 pt-20 lg:mx-52">
+<section class="prose z-10 mx-5 flex flex-col gap-5 pt-20 lg:mx-52" id="suggestfeature">
 	<h2 class="font-extralight">Missing features?</h2>
 	<p>
 		If you are missing a feature, please let us know by clicking the button below and adding it to

@@ -3,9 +3,9 @@
 </script>
 
 <div class="ud-header absolute left-0 top-0 z-40 flex w-full items-center bg-gray-900">
-	<div class="container">
+	<div class="mx-auto w-full pl-5 sm:px-8">
 		<div class="relative -mx-4 flex items-center justify-between">
-			<div class="w-96 max-w-full px-4">
+			<div class="w-96 max-w-full sm:px-4">
 				<a href="/" class="ud-menu-scroll navbar-logo flex w-full flex-row items-center py-2">
 					<img class="mr-2 h-7 w-7" src="$lib/images/logo.png" alt="PersonGraphMaker.com Logo" />
 					<p
