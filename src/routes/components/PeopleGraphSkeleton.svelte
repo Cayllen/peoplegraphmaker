@@ -346,6 +346,10 @@
 							}
 						]
 					});
+					if (!barChartMode && rtl !== downToUp) {
+						gradient.colorStops.reverse();
+						gradient2.colorStops.reverse();
+					}
 
 					// TODO: add option to set color of either fill or stroke or both
 					// NOTE: SUPER UGLY METHOD to color stuff because apparently one has to color every single path
